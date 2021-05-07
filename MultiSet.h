@@ -6,6 +6,7 @@
 #define PDNET2_0_MULTISET_H
 
 #include "Sort.h"
+#include "expression_tree.h"
 #include<unordered_map>
 
 typedef unsigned short token_count_t;
@@ -34,6 +35,7 @@ class SortValue
 public:
 //    virtual ~SortValue() = 0;
     virtual type getmytype() = 0;
+    virtual SORTID getsid() = 0;
     virtual void setcolor(const Bucket &bucket) = 0;
     virtual void getcolor(Bucket &bucket) = 0;
 };
@@ -47,6 +49,7 @@ private:
 public:
     explicit ProductSortValue(SORTID sid);
     virtual type getmytype(){return productsort;}
+    virtual SORTID getsid(){return sortid;}
     virtual void setcolor(const Bucket &bucket);
     virtual void getcolor(Bucket &bucket);
 };
@@ -57,6 +60,7 @@ private:
     Integer_t value;
 public:
     virtual type getmytype(){return Integer;}
+    virtual SORTID getsid(){cerr<<"IntegerSortValue doesn't have sid!"<<endl;exit(-1);};
     virtual void setcolor(const Bucket &bucket);
     virtual void getcolor(Bucket &bucket);
 };
@@ -67,6 +71,7 @@ private:
     Real_t value;
 public:
     virtual type getmytype(){return Real;}
+    virtual SORTID getsid(){cerr<<"RealSortValue doesn't have sid!"<<endl;exit(-1);};
     virtual void setcolor(const Bucket &bucket);
     virtual void getcolor(Bucket &bucket);
 };
@@ -77,6 +82,7 @@ private:
     String_t value;
 public:
     virtual type getmytype(){return String;}
+    virtual SORTID getsid(){cerr<<"StringSortValue doesn't have sid!"<<endl;exit(-1);};
     virtual void setcolor(const Bucket &bucket);
     virtual void getcolor(Bucket &bucket);
 };
@@ -172,16 +178,18 @@ private:
 //    Tokens *tokenQ;//queue contains head node
     unordered_map<token,token_count_t,tokenHasher,tokenEqualto> mapTokens;
     color_count_t color_count;
-    hash_t hash_value;
+//    hash_t hash_value;
 public:
-    MultiSet(type tid,SORTID sid):tid(tid),sid(sid){}
-    void clear();
-    void insert(MultiSet ms);
+    MultiSet(){color_count = 0;}
+    MultiSet(type tid,SORTID sid):tid(tid),sid(sid){color_count = 0;}
+    bool generateFromToken(const token &tk);
+
     bool operator>=(const MultiSet &ms1);
     bool operator==(const MultiSet &ms);
     void operator=(const MultiSet &ms);
-    void MINUS(MultiSet &ms);
-    void PLUS(MultiSet &ms);
+    void MINUS(const MultiSet &ms);
+    void PLUS(const MultiSet &ms);
+    void clear();
     hash_t Hash();
 
 };

@@ -197,3 +197,61 @@ bool operator==(Product_t p1,Product_t p2){
     }
     return true;
 }
+
+bool MultiSet::generateFromToken(const token &tk) {
+    if(tid != tk->getmytype() || (tid == productsort && sid != tk->getsid())){
+        cerr << "generateFromToken error! type doesn't match!"<<endl;
+        return false;
+    }
+    auto iter = mapTokens.find(tk);
+    if(iter != mapTokens.end())
+        iter->second++;
+    else {
+        mapTokens.emplace(tk, 1);
+        color_count++;
+    }
+    return true;
+}
+
+bool MultiSet::operator>=(const MultiSet &ms1) {
+    if(tid != ms1.tid || (tid == productsort && sid != ms1.sid)){
+        cerr << "error! MultiSet >= type doesn't match!"<<endl;
+        exit(-1);
+    }
+    auto iter2 = ms1.mapTokens.begin();
+    while(iter2 != ms1.mapTokens.end()){
+        auto iter1 = mapTokens.find(iter2->first);
+        if(iter1 == mapTokens.end())
+            return false;
+        if(iter1->second<iter2->second)
+            return false;
+        iter2++;
+    }
+    return true;
+}
+
+bool MultiSet::operator==(const MultiSet &ms1) {
+    if(tid != ms1.tid || (tid == productsort && sid != ms1.sid)){
+        cerr << "error! MultiSet >= type doesn't match!"<<endl;
+        exit(-1);
+    }
+    if(ms1.color_count!=color_count)
+        return false;
+    auto iter2 = ms1.mapTokens.begin();
+    while(iter2 != ms1.mapTokens.end()){
+        auto iter1 = mapTokens.find(iter2->first);
+        if(iter1 == mapTokens.end())
+            return false;
+        if(iter1->second != iter2->second)
+            return false;
+        iter2++;
+    }
+    return true;
+}
+
+void MultiSet::operator=(const MultiSet &ms) {
+    tid = ms.tid;
+    sid = ms.sid;
+    mapTokens = ms.mapTokens;
+    color_count = ms.color_count;
+}

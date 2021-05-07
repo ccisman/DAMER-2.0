@@ -43,14 +43,17 @@ public:
 
 class condition_tree
 {
-public:
+private:
     condition_tree_node *root;
     string exp;
     condition_tree_node *construct(string s);
+public:
+    condition_tree(string s){exp = s;root = construct(s);}
+    ~condition_tree(){deconstruct();}
     void deconstruct();
     condition_tree(){root = NULL;}
     void operator=(condition_tree ct);
-//    ~condition_tree(){deconstruct();}
+
 };
 
 extern int is_operator(string s, int pos);

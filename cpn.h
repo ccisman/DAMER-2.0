@@ -99,7 +99,8 @@ typedef struct CPN_Place
     vector<pair<string,string>> para_list;//first is identifier, second is place name
     //***PDNet added end***/
 
-    CPN_Place(){expression="";control_P=is_mutex=is_cond=is_executed=is_pointer=is_global=is_structure=false;}
+    CPN_Place(type tid,SORTID sid):initMarking(tid,sid){expression="";control_P=is_mutex=is_cond=is_executed=is_pointer=is_global=is_structure=false;}
+    CPN_Place(){}
     void operator=(CPN_Place &plc){
         //copy except producer and consumer
         id = plc.id;

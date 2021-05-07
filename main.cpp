@@ -33,5 +33,10 @@ int main(int argc,char **argv) {
     tk->setcolor(bkt);
     bkt.integer = 2;
     tk2->setcolor(bkt);
+    MultiSet ms(Integer,2);
+    ms.generateFromToken(tk);
+    ms.generateFromToken(tk2);
+//    ms.generateFromToken(tk3);
+    ms.generateFromToken(tk2);
     return 0;
 }
